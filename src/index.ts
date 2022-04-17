@@ -54,7 +54,7 @@ function timer(startTime: number) {
         alert("Done!");
         Deno.exit();
       }
-    }, 100);
+    }, 1000);
   }
 }
 
