@@ -1,5 +1,7 @@
 import { parse, Args } from "https://deno.land/std@0.135.0/flags/mod.ts";
 
+import { charTable } from "./lib/charMap.ts";
+
 /** Expected flags for timey. Each arg corresponds to a unit of time*/
 interface Options extends Args {
   m?: string;
@@ -33,6 +35,15 @@ function calculateStartTime(options: Options): number {
     time += parseInt(options.ms) / 1000;
   }
   return time;
+}
+
+function msToTime(duration: number) {
+  const milliseconds = Math.floor((duration % 1000) / 100);
+  const seconds = Math.floor((duration / 1000) % 60);
+  const minutes = Math.floor((duration / (1000 * 60)) % 60);
+  const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+  return `${hours}:${minutes}:${seconds}:${milliseconds}`;
 }
 
 function convertSecsToHMS(secs: number) {
