@@ -1,6 +1,6 @@
 export const charTable = new Map([
   [
-    1,
+    "1",
     [
       "    ■■",
       " ■■■■■",
@@ -13,7 +13,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    2,
+    "2",
     [
       "■■■■■■",
       "■■  ■■",
@@ -26,7 +26,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    3,
+    "3",
     [
       "■■■■■■",
       "■■  ■■",
@@ -39,7 +39,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    4,
+    "4",
     [
       "  ■■■■",
       " ■  ■■",
@@ -52,7 +52,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    5,
+    "5",
     [
       "■■■■■■",
       "■■  ■■",
@@ -65,7 +65,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    6,
+    "6",
     [
       "■■■■■■",
       "■■  ■■",
@@ -78,7 +78,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    7,
+    "7",
     [
       "■■■■■■",
       "    ■■",
@@ -91,7 +91,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    8,
+    "8",
     [
       "■■■■■■",
       "■■  ■■",
@@ -104,7 +104,7 @@ export const charTable = new Map([
     ],
   ],
   [
-    9,
+    "9",
     [
       "■■■■■■",
       "■■  ■■",
@@ -114,6 +114,32 @@ export const charTable = new Map([
       "    ■■",
       "    ■■",
       "■■■■■■",
+    ],
+  ],
+  [
+    "0",
+    [
+      "■■■■■■",
+      "■■  ■■",
+      "■■  ■■",
+      "■■  ■■",
+      "■■  ■■",
+      "■■  ■■",
+      "■■  ■■",
+      "■■■■■■",
+    ],
+  ],
+  [
+    ":",
+    [
+      "      ",
+      "      ",
+      "  ■■  ",
+      "      ",
+      "      ",
+      "  ■■  ",
+      "      ",
+      "      ",
     ],
   ],
 ]);

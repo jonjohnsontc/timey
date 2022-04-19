@@ -1,6 +1,7 @@
 import { parse, Args } from "https://deno.land/std@0.135.0/flags/mod.ts";
 
-import { charTable } from "./lib/charMap.ts";
+import { enc } from "./lib/utils.ts";
+import { print } from "./lib/printer.ts";
 
 /** Expected flags for timey. Each arg corresponds to a unit of time*/
 interface Options extends Args {
@@ -12,10 +13,6 @@ interface Options extends Args {
 }
 
 let id: number | undefined; // used to track interval calls
-
-function enc(s: string) {
-  return new TextEncoder().encode(s);
-}
 
 function calculateStartTime(options: Options): number {
   let time = 0;
@@ -37,31 +34,30 @@ function calculateStartTime(options: Options): number {
   return time;
 }
 
-function msToTime(duration: number) {
-  const milliseconds = Math.floor((duration % 1000) / 100);
-  const seconds = Math.floor((duration / 1000) % 60);
-  const minutes = Math.floor((duration / (1000 * 60)) % 60);
-  const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+function secsToTime(secs: number) {
+  let hr = Math.floor(secs / 3600).toString();
+  let min = Math.floor((secs % 3600) / 60).toString();
+  let sec = Math.floor((secs % 3600) % 60).toString();
 
-  return `${hours}:${minutes}:${seconds}:${milliseconds}`;
-}
+  hr = parseInt(hr) < 10 ? "0" + hr : hr;
+  min = parseInt(min) < 10 ? "0" + min : min;
+  sec = parseInt(sec) < 10 ? "0" + sec : sec;
 
-function convertSecsToHMS(secs: number) {
-  const hr = Math.floor(secs / 3600);
-  const min = Math.floor((secs % 3600) / 60);
-  const sec = Math.floor((secs % 3600) % 60);
-  const ms = Math.floor(((secs % 3600) % 60) / 1000);
-
-  return `${hr}:${min}:${sec}:${ms}`;
+  return `${hr}:${min}:${sec}`;
 }
 
 function timer(startTime: number) {
   if (!id) {
-    id = setInterval(async () => {
-      await Deno.stdout.write(enc(`${convertSecsToHMS(startTime--)}\r`));
-      if (startTime <= 0 && id) {
+    id = setInterval(() => {
+      print(secsToTime(startTime--));
+      // TODO:
+      // If startTime is 0, there will still be 2 secs left.
+      // -2 causes a char not valid error
+      // a finished timer should display all zeroes
+      if (startTime <= -1 && id) {
         clearInterval(id);
         id = undefined;
+        Deno.stdout.write(enc("\u001b[9B"));
         alert("Done!");
         Deno.exit();
       }
