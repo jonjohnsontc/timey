@@ -1,6 +1,7 @@
 import { enc } from "./utils.ts";
 import { charTable } from "./charMap.ts";
 
+// TODO: Not yet used
 export type PrintOptions = {
   marginLeft?: number;
   marginRight?: number;
@@ -8,7 +9,8 @@ export type PrintOptions = {
   marginBottom: number;
 };
 
-export function print(chars: string, _printOptions?: PrintOptions) {
+// I don't know that being async matters for this program
+export async function print(chars: string, _printOptions?: PrintOptions) {
   const fontHeight = 8; // TODO: Should be coupled to the charmap used
   const margin = (num: number) => "".padEnd(num, " ");
 
@@ -17,17 +19,24 @@ export function print(chars: string, _printOptions?: PrintOptions) {
 
   for (let row = 0; row < fontHeight; row++) {
     for (const char of chars) {
+      // TODO: This should be guarded against outside of this func
+      // If the character is negative, that means the timer has
+      // hit a negative number, and so nothing else should
+      // need to be printed.
+      if (char === "-") {
+        return;
+      }
       const c = charTable.get(char);
       if (!c) {
         throw Error(`Char not valid, you provided: '${char.charCodeAt(0)}'`);
       }
 
-      Deno.stdout.write(enc(marginLeft));
-      Deno.stdout.write(enc(c[row]));
-      Deno.stdout.write(enc(marginRight));
+      await Deno.stdout.write(enc(marginLeft));
+      await Deno.stdout.write(enc(c[row]));
+      await Deno.stdout.write(enc(marginRight));
     }
-    Deno.stdout.write(enc("\n"));
+    await Deno.stdout.write(enc("\n"));
   }
-  Deno.stdout.write(enc("\r"));
-  Deno.stdout.write(enc("\u001b[8A")); // returns us to the first row
+  await Deno.stdout.write(enc("\r"));
+  await Deno.stdout.write(enc("\u001b[8A")); // returns us to the first row
 }
