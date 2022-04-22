@@ -23,6 +23,7 @@ function timer(startTime: number) {
         const notif = new Notification();
         notif.title("All Done!");
         notif.body("Timer has finished");
+        notif.soundName("Basso");
         notif.show();
         alert("Done!");
         Deno.exit();
