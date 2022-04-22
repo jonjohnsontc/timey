@@ -1,4 +1,5 @@
 import { parse } from "https://deno.land/std@0.135.0/flags/mod.ts";
+import { Notification } from "https://deno.land/x/deno_notify@1.3.1/ts/mod.ts";
 
 import { calculateStartTime, secsToTime, Options, enc } from "./lib/utils.ts";
 import { print } from "./lib/printer.ts";
@@ -11,6 +12,7 @@ function timer(startTime: number) {
       await print(secsToTime(startTime--));
       // Straight printing the time
       // Deno.stdout.write(enc(`${secsToTime(startTime--)}\r`));
+
       // TODO:
       // If startTime is 0, there will still be 2 secs left.
       // -2 causes a char not valid error
@@ -18,6 +20,10 @@ function timer(startTime: number) {
         clearInterval(id);
         id = undefined;
         Deno.stdout.write(enc("\u001b[9B"));
+        const notif = new Notification();
+        notif.title("All Done!");
+        notif.body("Timer has finished");
+        notif.show();
         alert("Done!");
         Deno.exit();
       }
