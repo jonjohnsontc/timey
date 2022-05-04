@@ -7,9 +7,14 @@ import { print } from "./lib/printer.ts";
 let id: number | undefined; // used to track interval calls
 
 function timer(startTime: number) {
+  const notif = new Notification();
+  notif.title("All Done!");
+  notif.body(`Timer for ${secsToTime(startTime)} finished`);
+  notif.soundName("Basso");
+
   if (!id) {
     id = setInterval(async () => {
-      await print(secsToTime(startTime--));
+      await print(secsToTime(startTime--), { returnCursor: true });
       // Straight printing the time
       // Deno.stdout.write(enc(`${secsToTime(startTime--)}\r`));
 
@@ -20,13 +25,9 @@ function timer(startTime: number) {
         clearInterval(id);
         id = undefined;
         Deno.stdout.write(enc("\u001b[9B"));
-        const notif = new Notification();
-        notif.title("All Done!");
-        notif.body("Timer has finished");
-        notif.soundName("Basso");
         notif.show();
         alert("Done!");
-        Deno.exit();
+        // TODO:Perhaps have the option to restart the timer?
       }
     }, 1000);
   }
@@ -37,14 +38,20 @@ function main() {
 
   // TODO: None of the interactive logic has been implemented yet
   // Ideally, if someone doesn't provide a time, it should
-  // load a TUI to
+  // load a TUI to prompt someone to edit the time.
   if (!options.d && !options.h && !options.m && !options.ms && !options.s) {
     console.log("Welcome to Timey!");
     console.log("Please enter how long you'd like to set the timer for");
+    return;
   }
   const startTime = calculateStartTime(options);
 
   timer(startTime);
+  setInterval(() => {
+    if (!id) {
+      Deno.exit();
+    }
+  });
 }
 
 main();

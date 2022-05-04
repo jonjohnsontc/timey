@@ -1,7 +1,7 @@
 import { Args } from "https://deno.land/std@0.135.0/flags/mod.ts";
 import { assert } from "https://deno.land/std@0.135.0/testing/asserts.ts";
 
-/** Expected flags for timey. Each arg corresponds to a unit of time*/
+/** Expected flags for timey. Each arg corresponds to a unit of time */
 export interface Options extends Args {
   m?: string;
   s?: string;
@@ -45,6 +45,11 @@ Deno.test({
     const expectedHrMinSec = 10_860;
     const actualHrMinSec = calculateStartTime({ _: [], h: "3", m: "1" });
     assert(expectedHrMinSec === actualHrMinSec);
+
+    // 24 hours ewww
+    const expected24 = 86_400;
+    const actual24 = calculateStartTime({ _: [], h: "24" });
+    assert(expected24 === actual24);
   },
 });
 
